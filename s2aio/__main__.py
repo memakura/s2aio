@@ -821,14 +821,14 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", dest="client", default="scratch", help="default = scratch [scratch | snap | no_client]")
     # noinspection PyPep8
-    parser.add_argument("-l", dest="language", default="1", help=
+    parser.add_argument("-l", dest="language", default="12", help=
     " 1=English(default) 2=Chinese(zh-CN)"
     " 3=Chinese(zh-TW)"
     " 4=Dutch(NL) 5=French(FR) 6=German(DE)"
     " 7=Greek(GR) 8=Korean(KO) 9=Italian(IT)"
     " 10=Portuguese(PT) 11=Spanish(ES) 12=Japanese(JA)")
-    parser.add_argument("-p", dest="comport", default="None", help="Arduino COM port - e.g. /dev/ttyACMO or COM3")
-    parser.add_argument("-b", dest="base_path", default="None",
+    parser.add_argument("-p", dest="comport", default="COM5", help="Arduino COM port - e.g. /dev/ttyACMO or COM3")
+    parser.add_argument("-b", dest="base_path", default=".",
                         help="Python File Path - e.g. /usr/local/lib/python3.5/dist-packages/s2aio")
     parser.add_argument("-v", action='store_true', help='Print version and Python path')
 
