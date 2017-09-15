@@ -105,7 +105,7 @@ class S2AIO:
                                        '5': 's2aio_base_FR.sb2', '6': 's2aio_base_DE.sb2',
                                        '7': 's2aio_base_GR.sb2', '8': 's2aio_base_KO.sb2',
                                        '9': 's2aio_base_IT.sb2', '10': 's2aio_base_PT.sb2',
-                                       '11': 's2aio_base_ES.sb2'}
+                                       '11': 's2aio_base_ES.sb2', '12': 's2aio_base_JA.sb2'}
 
         self.scratch_language = config.get('scratch_info', 'scratch_language')
         self.snap_url = config.get('scratch_info', 'snap_url')
@@ -826,7 +826,7 @@ def main():
     " 3=Chinese(zh-TW)"
     " 4=Dutch(NL) 5=French(FR) 6=German(DE)"
     " 7=Greek(GR) 8=Korean(KO) 9=Italian(IT)"
-    " 10=Portuguese(PT) 11=Spanish(ES)")
+    " 10=Portuguese(PT) 11=Spanish(ES) 12=Japanese(JA)")
     parser.add_argument("-p", dest="comport", default="None", help="Arduino COM port - e.g. /dev/ttyACMO or COM3")
     parser.add_argument("-b", dest="base_path", default="None",
                         help="Python File Path - e.g. /usr/local/lib/python3.5/dist-packages/s2aio")
