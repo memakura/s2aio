@@ -2,4 +2,5 @@
 .project
 .pydevproject
 build/
+dist/
 *.prefs
