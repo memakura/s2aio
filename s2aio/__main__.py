@@ -170,40 +170,14 @@ class S2AIO:
             # instantiate the arduino interface
             self.board = PymataCore(com_port=self.com_port)
             await self.board.start_aio()
+            print(">>> pymatacore initialized") # added for debug
 
             # populate the arduino pin capability lists
             await self.get_pin_capabilities()
+            print(">>> got pin capabilities") # added for debug
 
             # start up the HTTP server
             app = web.Application(loop=my_loop)
-            srv = await my_loop.create_server(app.make_handler(), '127.0.0.1', 50209)
-
-            # start scratch if specified
-            # open to a specified project
-
-            if self.client == 'scratch':
-                if self.scratch_executable and self.scratch_project:
-                    # noinspection PyPep8
-                    if sys.platform.startswith('win32'):
-                        os_string = "start /b " + self.scratch_executable + ' ' + self.scratch_project
-                        await asyncio.sleep(self.windows_wait_time)
-                        os.system(os_string)
-                    else:
-                        # noinspection PyPep8
-                        os_string = 'nohup ' + self.scratch_executable + ' ' + self.scratch_project + ' ' + ' > /dev/null 2>&1 &'
-                        os.system(os_string)
-                elif self.scratch_executable and not self.scratch_project:
-                    os_string = 'nohup ' + self.scratch_executable + '> /dev/null 2>&1 &'
-                    os.system(os_string)
-                else:
-                    print('You must provide scratch excutable information')
-            elif self.client == 'snap':
-                new = 2
-                webbrowser.open(self.snap_url, new=new)
-                await asyncio.sleep(self.windows_wait_time)
-            else:
-                # no client specified, just start s2aio and wait for the user to start the client of choice
-                pass
 
             # Scratch command handlers
             app.router.add_route('GET', '/digital_pin_mode/{enable}/{pin}/{mode}', self.setup_digital_pin)
@@ -220,7 +194,41 @@ class S2AIO:
             app.router.add_route('GET', '/analog_read/{pin}', self.analog_read)
             app.router.add_route('GET', '/problem', self.problem)
 
+            srv = await my_loop.create_server(app.make_handler(), '127.0.0.1', 50209)
+            print(">>> server created")  # added for debug
+
+            # start scratch if specified
+            # open to a specified project
             if self.client == 'scratch':
+                if self.scratch_executable and self.scratch_project:
+                    # print("scratch_executable: {0}".format(self.scratch_executable))  # for debug
+                    # print("scratch_project: {0}".format(self.scratch_project))  # for debug
+                    # noinspection PyPep8
+                    if sys.platform.startswith('win32'):
+                        os_string = "start /b " + self.scratch_executable + ' ' + self.scratch_project
+                        await asyncio.sleep(self.windows_wait_time)
+                        os.system(os_string)
+                    else:
+                        # noinspection PyPep8
+                        os_string = 'nohup ' + self.scratch_executable + ' ' + self.scratch_project + ' ' + ' > /dev/null 2>&1 &'
+                        os.system(os_string)
+                    print(">>> started scratch")  # added for debug
+                elif self.scratch_executable and not self.scratch_project:
+                    os_string = 'nohup ' + self.scratch_executable + '> /dev/null 2>&1 &'
+                    os.system(os_string)
+                else:
+                    print('You must provide scratch excutable information')
+            elif self.client == 'snap':
+                new = 2
+                webbrowser.open(self.snap_url, new=new)
+                await asyncio.sleep(self.windows_wait_time)
+            else:
+                # no client specified, just start s2aio and wait for the user to start the client of choice
+                pass
+
+            print('=== s2aio started (port: 50209) ===')  # added for debug
+            if self.client == 'scratch':
+                print('>>> start poll watchdog')  # added for debug
                 await self.poll_watchdog()
             else:
                 await self.keep_alive()
@@ -238,7 +246,7 @@ class S2AIO:
         """
         # get the capability report
         pin_capabilities = await self.board.get_capability_report()
-
+        # print(pin_capabilities)  # added for debug
         # initialize the total pin count to o
         pin_count = 0
 
@@ -247,6 +255,7 @@ class S2AIO:
         # Each set of digital pin capabilities is delimited by the value of 127
         # Accumulate all of the capabilities into a list for the current pin
         for x in pin_capabilities:
+            #print('x : {0}'.format(x))  # added for debug
             if x != 127:
                 pin_data.append(x)
                 continue
@@ -255,7 +264,9 @@ class S2AIO:
             # number of bits of data resolution for the pin. The resolution is ignored
             else:
                 pin__x_capabilities = pin_data[::2]
+                #print('  x_capabilities : {0}'.format(pin__x_capabilities))  # added for debug
                 for y in pin__x_capabilities:
+                    #print('   y={0}'.format(y))  # added for debug
                     if y == 0:
                         self.input_capable.append(pin_count)
                     elif y == 1:
@@ -271,7 +282,7 @@ class S2AIO:
                     elif y == 13:  # ignore pull-up
                         pass
                     else:
-                        print('Unknown Pin Type ' + y)
+                        print('Unknown Pin Type ' + str(y))
                 # clear the pin_data list for the next pin and bump up the pin count
                 pin_data = []
                 # add an entry into the digital data dictionary
@@ -280,7 +291,7 @@ class S2AIO:
                 pin_count += 1
         # Done with digital pin discovery, save the pin count
         self.num_digital_pins = pin_count
-
+        #print('num digital pins: {0}'.format(self.num_digital_pins))  # added for debug
         # Get analog channel data and create the analog_channel list
         analog_pins = await self.board.get_analog_map()
         for x in analog_pins:
@@ -819,7 +830,7 @@ class S2AIO:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-c", dest="client", default="scratch", help="default = scratch [scratch | snap | no_client]")
+    parser.add_argument("-c", dest="client", default="no_client", help="default = scratch [scratch | snap | no_client]")
     # noinspection PyPep8
     parser.add_argument("-l", dest="language", default="12", help=
     " 1=English(default) 2=Chinese(zh-CN)"

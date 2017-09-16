@@ -1,0 +1,97 @@
+{
+    "extensionName": "s2aio",
+    "extensionPort": 50209,
+    "url": "https://github.com/MrYsLab/PyMata",
+    "blockSpecs": [
+        [
+            " ",
+            "%m.pin_state : デジタルピン %n を %m.digital_pin_mode として",
+            "digital_pin_mode",
+            "有効化",
+            "?",
+            "出力"
+        ],
+        [
+            " ",
+            "%m.pin_state : アナログピン(A) %n を入力として",
+            "analog_pin_mode",
+            "有効化",
+            "?"
+        ],
+        [
+            "",
+            "デジタル出力: ピン %n を %m.high_low に設定",
+            "digital_write",
+            "?",
+            0
+        ],
+        [
+            "",
+            "アナログ出力 (PWM): ピン %n の値を %n に設定",
+            "analog_write",
+            "?",
+            0
+        ],
+        [
+            "",
+            "ピン %n の音を鳴らす (%n Hz, %n ミリ秒)",
+            "play_tone",
+            "?",
+            1000,
+            500
+        ],
+        [
+            "",
+            "ピン %n の音を止める",
+            "tone_off",
+            "?"
+        ],
+        [
+            "",
+            "ピン %n のサーボを %n 度にする",
+            "set_servo_position",
+            "?",
+            90
+        ],
+        [
+            "r",
+            "デジタルピン %n の値を読む",
+            "digital_read",
+            "?"
+        ],
+        [
+            "r",
+            "アナログピン(A) %n の値を読む",
+            "analog_read",
+            "?"
+        ],
+        [
+            "r",
+            "デバッガ",
+            "problem"
+        ]
+
+    ],
+    "menus": {
+        "pin_state": [
+            "有効化",
+            "無効化"
+        ],
+        "digital_pin_mode": [
+            "入力",
+            "出力",
+            "PWM",
+            "サーボ",
+            "音",
+            "ソナー"
+        ],
+        "high_low": [
+            "0",
+            "1"
+        ],
+        "off_on": [
+            "オフ",
+            "オン"
+        ]
+    }
+}

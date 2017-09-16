@@ -45,6 +45,7 @@ build_exe_options = {"packages": ['asyncio', 'serial.win32'],
                         ('s2aio/miscellaneous/', 'miscellaneous'),
                         ('s2aio/ScratchFiles/', 'ScratchFiles'),
                         'icons/',
+                        '00scratch/',
                         'license.txt'
                     ]
 }
