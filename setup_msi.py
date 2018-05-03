@@ -5,6 +5,13 @@ import json
 import os
 from cx_Freeze import setup, Executable
 
+# --- for resolving KeyError: 'TCL_LIBRARY' ---
+import os.path
+PYTHON_INSTALL_DIR = os.path.dirname(os.path.dirname(os.__file__))
+os.environ['TCL_LIBRARY'] = os.path.join(PYTHON_INSTALL_DIR, 'tcl', 'tcl8.6')
+os.environ['TK_LIBRARY'] = os.path.join(PYTHON_INSTALL_DIR, 'tcl', 'tk8.6')
+# ------
+
 
 name = "s2aio"
 version = "1.12"
@@ -37,7 +44,7 @@ shortcut_table = [
 # Now create the table dictionary
 msi_data = {"Shortcut": shortcut_table}
 
-build_exe_options = {"packages": ['asyncio', 'serial.win32'],
+build_exe_options = {"packages": ['asyncio', 'serial.win32', 'idna'],
                     "excludes": [],
                     "includes": [],
                     "include_files": [
